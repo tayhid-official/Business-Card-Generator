@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+
+.container {
+  width: 850px;
+  background: #3a5c3c;
+  padding: 20px 30px;
+  box-shadow: 0 0 10px rgba(218, 29, 29, 0.1);
+  border-radius: 8px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #f4ec07;
+}
+
+form label {
+  display: block;
+  margin-bottom: 12px;
+  color: #e0f30b;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #00f510;
+  border-radius: 4px;
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 24px;
+  background: #079de8;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #bf1c1c;
+}
+
+#result {
+  text-align: center;
+  margin-top: 30px;
+}
+
+#downloadBtn {
+  display: none;
+  padding: 12px 24px;
+  background: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+#downloadBtn:hover {
+  background: #e61414;
+}
+.site-footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  padding: 15px 0;
+  border-top: 1px solid #ccc;
+  background: #f9f9f9;
+  border-radius: 0 0 10px 10px;
+}

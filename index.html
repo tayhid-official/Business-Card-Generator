@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Business Card Generator</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Business Card Form</h1>
+    <form id="cardForm">
+      <label>Name<br><input type="text" id="name" required /></label>
+      <label>Occupation<br><input type="text" id="occupation" required /></label>
+      <label>Mobile Number<br><input type="tel" id="phone" required /></label>
+      <label>Email<br><input type="email" id="email" required /></label>
+      <label>Address<br><input type="text" id="address" placeholder="Your Address" /></label>
+      <button type="submit">Generate Card</button>
+    </form>
+   <!-- ✅ View count -->
+    <p id="cardCountDisplay" style="font-size: 18px; color: #fcfcfc;">No of Generated Card: 0</p>
+    <div id="result">
+      <canvas id="cardCanvas" width="800" height="400"></canvas><br>
+      <a id="downloadBtn" href="#" download="business_card.png">Download Card</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('cardForm');
+    const canvas = document.getElementById('cardCanvas');
+    const ctx = canvas.getContext('2d');
+    const downloadBtn = document.getElementById('downloadBtn');
+    
+    // ✅ Card generation counter
+    let cardCount = 0;
+    const cardCountDisplay = document.getElementById('cardCountDisplay');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const occupation = document.getElementById('occupation').value;
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+      const address = document.getElementById('address').value;
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Background design (blue + curve)
+      const w = canvas.width, h = canvas.height;
+      const grad = ctx.createLinearGradient(0, 0, w, 0);
+      grad.addColorStop(0, '#00aaff');
+      grad.addColorStop(1, '#ffffff');
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(w, 0);
+      ctx.quadraticCurveTo(w * 0.5, h * 0.25, 0, h * 0.5);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // QR Code
+      const qr = new QRious({
+        value: `Name: ${name}\nOccupation: ${occupation}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${address}`,
+        size: 120
+      });
+
+      const qrImg = new Image();
+      qrImg.src = qr.toDataURL();
+
+      qrImg.onload = () => {
+        ctx.drawImage(qrImg, 30, 30, 100, 100);
+
+        // Text content
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 40px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(name, 260, 80);
+
+        ctx.font = '24px sans-serif';
+        ctx.fillText(occupation, 260, 120);
+
+        ctx.font = '20px sans-serif';
+        ctx.fillText(`📞 ${phone}`, 260, 180);
+        ctx.fillText(`✉️ ${email}`, 260, 220);
+        if (address) ctx.fillText(`📍 ${address}`, 260, 260);
+
+        // ✅ Update view count
+        cardCount++;
+        cardCountDisplay.textContent = `No of Generated Card: ${cardCount}`;
+
+        // Show download button
+        downloadBtn.href = canvas.toDataURL('image/png');
+        downloadBtn.style.display = 'inline-block';
+      };
+    });
+  </script>
+  <footer class="site-footer">
+  © 2025 <strong>Md. Tayhid Hasan</strong> | Designed with ❤️ ChatGPT | Bangladesh
+</footer>
+</body>
+</html>
