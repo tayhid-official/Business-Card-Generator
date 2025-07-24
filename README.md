@@ -37,5 +37,5 @@ Each card is auto-generated with real-time embedded data and a QR code — ready
 
 ## 🌍 Live Demo
 
-> [🔗 View Project Live](https://tayhid-official.github.io/Business-Card/)
+> [🔗 View Project Live](https://tayhid-official.github.io/Business-Card-Generator/)
 
