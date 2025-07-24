@@ -38,4 +38,12 @@ Each card is auto-generated with real-time embedded data and a QR code — ready
 ## 🌍 Live Demo
 
 > [🔗 View Project Live](https://tayhid-official.github.io/Business-Card-Generator/)
+>
+> 🙋‍♂️ Author
+Md. Tayhid Hasan
+Frontend Developer | Bangladesh 🇧🇩
+
+📜 License
+This project is open-source and free to use. Consider giving credit if you remix or reuse .
+Thank you...
 
