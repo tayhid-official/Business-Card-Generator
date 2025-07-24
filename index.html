@@ -25,18 +25,36 @@
     </div>
   </div>
 
- <script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
   window.onload = function () {
+    // ✅ Your Firebase Project Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAj4iGCp7QPgHtIRzaTXiJfhRJ1HnQ2Xvc",
+      authDomain: "business-card-dca05.firebaseapp.com",
+      databaseURL: "https://business-card-dca05-default-rtdb.firebaseio.com",
+      projectId: "business-card-dca05",
+      storageBucket: "business-card-dca05.firebasestorage.app",
+      messagingSenderId: "917052058865",
+      appId: "1:917052058865:web:6defc6c23660804a7e8d50"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
     const form = document.getElementById('cardForm');
     const canvas = document.getElementById('cardCanvas');
     const ctx = canvas.getContext('2d');
     const downloadBtn = document.getElementById('downloadBtn');
     const cardCountDisplay = document.getElementById('cardCountDisplay');
 
-    // ✅ Get saved count or default to 0
-    let cardCount = localStorage.getItem('cardCount');
-    cardCount = cardCount ? parseInt(cardCount) : 0;
-    cardCountDisplay.textContent = `Cards Generated: ${cardCount}`;
+    // 📡 Realtime counter sync from Firebase
+    const counterRef = db.ref('globalCardCount');
+    counterRef.on('value', snapshot => {
+      const count = snapshot.val() || 0;
+      cardCountDisplay.textContent = `Cards Generated: ${count}`;
+    });
 
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -48,15 +66,14 @@
       const address = document.getElementById('address').value;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       const w = canvas.width, h = canvas.height;
+
       const grad = ctx.createLinearGradient(0, 0, w, 0);
       grad.addColorStop(0, '#00aaff');
       grad.addColorStop(1, '#ffffff');
 
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, w, h);
-
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.lineTo(w, 0);
@@ -75,7 +92,6 @@
 
       qrImg.onload = () => {
         ctx.drawImage(qrImg, 30, 30, 100, 100);
-
         ctx.fillStyle = '#000';
         ctx.font = 'bold 40px sans-serif';
         ctx.textAlign = 'left';
@@ -87,10 +103,8 @@
         ctx.fillText(`✉️ ${email}`, 260, 220);
         if (address) ctx.fillText(`📍 ${address}`, 260, 260);
 
-        // ✅ Update and persist count
-        cardCount++;
-        localStorage.setItem('cardCount', cardCount);
-        cardCountDisplay.textContent = `Cards Generated: ${cardCount}`;
+        // 🔄 Increment global counter
+        counterRef.transaction(current => (current || 0) + 1);
 
         downloadBtn.href = canvas.toDataURL('image/png');
         downloadBtn.style.display = 'inline-block';
@@ -98,6 +112,7 @@
     });
   };
 </script>
+
 
 
   <footer class="site-footer">
