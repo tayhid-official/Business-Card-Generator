@@ -53,7 +53,7 @@
     const counterRef = db.ref('globalCardCount');
     counterRef.on('value', snapshot => {
       const count = snapshot.val() || 0;
-      cardCountDisplay.textContent = `Cards Generated: ${count}`;
+      cardCountDisplay.textContent = `No of Generated Card: ${count}`;
     });
 
     form.addEventListener('submit', e => {
@@ -116,7 +116,7 @@
 
 
   <footer class="site-footer">
-  © 2025 <strong>Md. Tayhid Hasan</strong> | Designed with ❤️ ChatGPT | Bangladesh
+  © 2025 <strong>Md. Tayhid Hasan</strong> | Bangladesh
 </footer>
 </body>
 </html>
