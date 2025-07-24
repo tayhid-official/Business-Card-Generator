@@ -26,79 +26,79 @@
   </div>
 
  <script>
-  const form = document.getElementById('cardForm');
-  const canvas = document.getElementById('cardCanvas');
-  const ctx = canvas.getContext('2d');
-  const downloadBtn = document.getElementById('downloadBtn');
-  const cardCountDisplay = document.getElementById('cardCountDisplay');
+  window.onload = function () {
+    const form = document.getElementById('cardForm');
+    const canvas = document.getElementById('cardCanvas');
+    const ctx = canvas.getContext('2d');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const cardCountDisplay = document.getElementById('cardCountDisplay');
 
-  // ✅ Get existing count from localStorage (or 0 if not found)
-  let cardCount = localStorage.getItem('cardCount') ? parseInt(localStorage.getItem('cardCount')) : 0;
-  cardCountDisplay.textContent = `Cards Generated: ${cardCount}`;
+    // ✅ Get saved count or default to 0
+    let cardCount = localStorage.getItem('cardCount');
+    cardCount = cardCount ? parseInt(cardCount) : 0;
+    cardCountDisplay.textContent = `Cards Generated: ${cardCount}`;
 
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const occupation = document.getElementById('occupation').value;
-    const phone = document.getElementById('phone').value;
-    const email = document.getElementById('email').value;
-    const address = document.getElementById('address').value;
+    form.addEventListener('submit', e => {
+      e.preventDefault();
 
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const name = document.getElementById('name').value;
+      const occupation = document.getElementById('occupation').value;
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+      const address = document.getElementById('address').value;
 
-    // Background design
-    const w = canvas.width, h = canvas.height;
-    const grad = ctx.createLinearGradient(0, 0, w, 0);
-    grad.addColorStop(0, '#00aaff');
-    grad.addColorStop(1, '#ffffff');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, w, h);
+      const w = canvas.width, h = canvas.height;
+      const grad = ctx.createLinearGradient(0, 0, w, 0);
+      grad.addColorStop(0, '#00aaff');
+      grad.addColorStop(1, '#ffffff');
 
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(w, 0);
-    ctx.quadraticCurveTo(w * 0.5, h * 0.25, 0, h * 0.5);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
 
-    // QR Code
-    const qr = new QRious({
-      value: `Name: ${name}\nOccupation: ${occupation}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${address}`,
-      size: 120
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(w, 0);
+      ctx.quadraticCurveTo(w * 0.5, h * 0.25, 0, h * 0.5);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      const qr = new QRious({
+        value: `Name: ${name}\nOccupation: ${occupation}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${address}`,
+        size: 120
+      });
+
+      const qrImg = new Image();
+      qrImg.src = qr.toDataURL();
+
+      qrImg.onload = () => {
+        ctx.drawImage(qrImg, 30, 30, 100, 100);
+
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 40px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(name, 260, 80);
+        ctx.font = '24px sans-serif';
+        ctx.fillText(occupation, 260, 120);
+        ctx.font = '20px sans-serif';
+        ctx.fillText(`📞 ${phone}`, 260, 180);
+        ctx.fillText(`✉️ ${email}`, 260, 220);
+        if (address) ctx.fillText(`📍 ${address}`, 260, 260);
+
+        // ✅ Update and persist count
+        cardCount++;
+        localStorage.setItem('cardCount', cardCount);
+        cardCountDisplay.textContent = `Cards Generated: ${cardCount}`;
+
+        downloadBtn.href = canvas.toDataURL('image/png');
+        downloadBtn.style.display = 'inline-block';
+      };
     });
-
-    const qrImg = new Image();
-    qrImg.src = qr.toDataURL();
-
-    qrImg.onload = () => {
-      ctx.drawImage(qrImg, 30, 30, 100, 100);
-
-      ctx.fillStyle = '#000';
-      ctx.font = 'bold 40px sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText(name, 260, 80);
-
-      ctx.font = '24px sans-serif';
-      ctx.fillText(occupation, 260, 120);
-
-      ctx.font = '20px sans-serif';
-      ctx.fillText(`📞 ${phone}`, 260, 180);
-      ctx.fillText(`✉️ ${email}`, 260, 220);
-      if (address) ctx.fillText(`📍 ${address}`, 260, 260);
-
-      // ✅ Update count and store it in localStorage
-      cardCount++;
-      localStorage.setItem('cardCount', cardCount);
-      cardCountDisplay.textContent = `Cards Generated: ${cardCount}`;
-
-      downloadBtn.href = canvas.toDataURL('image/png');
-      downloadBtn.style.display = 'inline-block';
-    };
-  });
+  };
 </script>
+
 
   <footer class="site-footer">
   © 2025 <strong>Md. Tayhid Hasan</strong> | Designed with ❤️ ChatGPT | Bangladesh
